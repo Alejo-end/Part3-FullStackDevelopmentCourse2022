@@ -1,0 +1,12 @@
+title New Note
+note over browser:
+ the user writes the note content in the input and submit it.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+server-->browser: new_note
+
+note over browser:
+browser recharges the DOM with the generated note.
+end note
+

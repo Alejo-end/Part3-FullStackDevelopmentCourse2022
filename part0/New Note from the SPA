@@ -1,0 +1,10 @@
+title New Note from the SPA
+note over browser:
+ the user writes the note content in the input and submit it.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: new_note_spa
+
+
+
