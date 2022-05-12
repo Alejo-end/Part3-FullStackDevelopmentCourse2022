@@ -1,14 +1,25 @@
-title Single Page App
-browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
-server-->browser: spa
-browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.jss
+title SPA - Assignment 5
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa 
+server-->browser: HTML document
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
 server-->browser: spa.js
 
 note over browser:
-browser starts executing js-code
-that requests JSON data from server 
+browser executes the js file 
+so it gets the updated data.json
 end note
 
-browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
-server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
 
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json 
+server-->browser: data.json [{content: "Ok lets go", date: "2022-05-12T12:55:20.050Z"}...]
+
+
+note over browser:
+browser executes the event 
+so it recharges the notes page.
+end note

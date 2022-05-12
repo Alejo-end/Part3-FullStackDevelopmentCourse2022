@@ -1,12 +1,32 @@
 title New Note
 note over browser:
- the user writes the note content in the input and submit it.
+The user writes the note content in the input.
+Then the user submits it by pressing the button
 end note
 
-browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
-server-->browser: new_note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note 
+server-->browser: location: https://studies.cs.helsinki.fi/exampleapp/notes
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes 
+server-->browser: HTML document
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
 
 note over browser:
-browser recharges the DOM with the generated note.
+browser executes the js file 
+so it gets the updated data.json with the new note
 end note
 
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json 
+server-->browser: data.json {content: "Ok lets go", date: "2022-05-12T12:55:20.050Z"}
+
+
+note over browser:
+browser executes the event 
+so it recharges the browser with the new note.
+end note

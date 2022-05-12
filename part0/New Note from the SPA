@@ -1,10 +1,17 @@
-title New Note from the SPA
+title New Note from SPA - Assignment 6
 note over browser:
- the user writes the note content in the input and submit it.
+The user writes the note content in the input.
+Then the user submits it by pressing the button
 end note
 
-browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
-server-->browser: new_note_spa
+note over browser:
+browser executes the event handler
+so it recharges the browser with the new note.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa 
+server-->browser: {"message":"note created"}
+
 
 
 
