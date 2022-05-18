@@ -16,6 +16,8 @@ const App = () => {
   const all = good + neutral + bad;
   const average = (good - bad) / all;
   const positive = good / all * 100;
+  const labels = ["good", "neutral", "bad", "all", "average", "positive"];
+  const values = [good, neutral, bad, all, average, positive];
 
 
   return (
@@ -30,14 +32,9 @@ const App = () => {
 
           <h2>Statistics</h2>
       {all > 0 ? (
-        <>
+        
 
-          <Statistics label={"good"} count={good} />
-          <Statistics label={"neutral"} count={neutral} />
-          <Statistics label={"bad"} count={bad} />
-          <Statistics label={"all"} count={bad} />
-          <Statistics label={"average"} count={average} />
-          <Statistics label={"positive"} count={positive} /></>) : <p>No feedback given</p>
+          <Statistics labels={labels}  counts={values} />) : <p>No feedback given</p>
       }
 
     </div>
