@@ -16,7 +16,8 @@ const Header = ({header}) => {
 
 const DisplayVotes = ({votes, selected}) => {
   return (
-    <p>Total votes: {votes[selected]}</p>
+    
+    <p>has {votes[selected]} votes</p>
   )
 }
 
@@ -55,7 +56,7 @@ const App = () => {
   const [votes, setVote] = useState(Array(anecdotes.length).fill(0))
 
   const nextAnec = 'Next anecdote'
-  const voteText = 'Upvote'
+  const voteText = 'Vote'
   const anecHeader = 'Anecdote of the day'
 
   const selectRandomAnecdote = () => {
@@ -77,8 +78,8 @@ const App = () => {
       <Header header={anecHeader}/>
       <DisplayAnecdote anecdotes={anecdotes} selected={selected}/>
       <DisplayVotes votes={votes} selected={selected}/>
-      <Button clickFunc={selectRandomAnecdote} description={nextAnec}/>
       <Button clickFunc={upvote} description={voteText}/>
+      <Button clickFunc={selectRandomAnecdote} description={nextAnec}/>
       <AnecMostVotes votes={votes} anecdotes={anecdotes}/>
     </div>
   )
