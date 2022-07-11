@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Person from './components/Person'
 import Form from './components/Form'
 import Filter from './components/Filter'
 import Title from './components/Title'
+import axios from 'axios'
 
 
 const App = () => {
@@ -47,6 +48,13 @@ const App = () => {
       return persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
     }
   } 
+
+  useEffect(() => { //as shown in part 2, effect hooks, it fetches persons data for the initial state as asked in 2.11
+    axios.get('http://localhost:3001/persons')
+    .then(response => {
+      setPersons(response.data)
+    })
+  }, [])
 
   return (
     <div>
