@@ -14,9 +14,10 @@ const Weather = ({ weather }) => {
     return (
         <div>
             <p>temperature {temp} Celsius</p>
-            <p>wind {weather.wind.speed} m/s</p>
+            <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt={weather.weather[0].main} />
             <p>Description: {weather.weather[0].main}</p>
             <p>Humidity: {weather.main.humidity} %</p>
+            <p>Wind Speed: {weather.wind.speed} m/s</p>
         </div>
     )
 }
@@ -33,7 +34,7 @@ const Language = ({ language }) => {
 
 const Country = ({ country }) => {
     const [weather, setWeather] = useState([])
-    const apikey = process.env.REACT_APP_API_KEY
+    const apikey = process.env.REACT_APP_WEATHER_API_KEY
     const apiReq = `https://api.openweathermap.org/data/2.5/weather?q=${country.capital[0]}&appid=${apikey}`
     const weatherTitle = `Weather in ${country.capital[0]}`
 

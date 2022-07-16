@@ -6,6 +6,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+Before running add the api key for the weather api as REACT_APP_WEATHER_API_KEY={apikey} in the .env document.
+
 ### `npm start`
 
 Runs the app in the development mode.\
