@@ -1,8 +1,8 @@
-const Person = ({ name, number }) => {
+const Person = ({ name, number, deleteOne }) => {
     return (
         <div>
             <p>
-                {name} {number}
+                {name} {number} <button clickFunc={() => deleteOne(name)}>delete</button>
             </p>
         </div>
     )
