@@ -6,13 +6,17 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "deploy": "git push heroku master",
+    "logs:prod": "heroku logs --tail",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "proxy": "http://localhost:3001",
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.1",
+    "mongoose": "^6.4.4",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
