@@ -28,7 +28,7 @@ let persons = [
     }
 ]
 
-export const getIdRandom = () => Math.floor(Math.random() * 1000000)
+const getIdRandom = () => Math.floor(Math.random() * 1000000)
 
 app.use(express.json());
 app.use(cors());
