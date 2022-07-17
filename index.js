@@ -2,7 +2,7 @@ const express = require('express')
 const morgan = require("morgan")
 const cors = require('cors')
 const app = express()
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 
 let persons = [
@@ -28,10 +28,11 @@ let persons = [
     }
 ]
 
-const getIdRandom = () => Math.floor(Math.random() * 1000000) 
+const getIdRandom = () => Math.floor(Math.random() * 1000000)
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static("build"))
 
 app.use(
     morgan(function (tokens, req, res) {
@@ -58,7 +59,7 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     response.end('Phonebook has info for ' + persons.length + ' people')
-    new Date().toISOString()
+    response.write(Date())
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -83,19 +84,19 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    if(!body.name || !body.number) {
+    if (!body.name || !body.number) {
         return response.status(400).json({
             error: `Name or number missing`
         })
     }
 
-    if(persons.find(person => person.name === body.name)) {
+    if (persons.find(person => person.name === body.name)) {
         return response.status(400).json({
             error: `Name already exists`
         })
     }
 
-    const person = {...body, id: getIdRandom()}
+    const person = { ...body, id: getIdRandom() }
     persons = persons.concat(person)
     response.json(person)
 })
@@ -115,6 +116,6 @@ app.listen(PORT, () => {
 
 const unknownMethod = (request, response) => {
     response.status(404).send({ error: 'Method Not Available' })
-  }
-  
-  app.use(unknownMethod)
+}
+
+app.use(unknownMethod)
