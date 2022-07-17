@@ -1,5 +1,3 @@
-
-
 const Form = ({ submitFunc, nameValue, phoneValue, inputChangeFunc, inputPhoneFunc, buttonDesc }) => {
     return (
         <form onSubmit={submitFunc}>
@@ -16,4 +14,4 @@ const Form = ({ submitFunc, nameValue, phoneValue, inputChangeFunc, inputPhoneFu
     )
 }
 
-export default Form
+export default Form;

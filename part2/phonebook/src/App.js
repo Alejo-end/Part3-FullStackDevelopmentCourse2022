@@ -3,6 +3,7 @@ import Person from './components/Person'
 import Form from './components/Form'
 import Filter from './components/Filter'
 import Title from './components/Title'
+import Alert from './components/Alert'
 import server from './services/server'
 
 
@@ -13,6 +14,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [newText, setText] = useState('')
+  const [color, setColor] = useState('green')
 
   const handleSetPerson = (event) => {
     setNewName(event.target.value)
@@ -41,6 +44,11 @@ const App = () => {
             setPersons(persons.map(person => person.id !== prevPerson[0].id ? person : updatedPerson))
             setNewName('')
             setNewNumber('')
+            setText(`Successfully updated ${updatedPerson.name}`)
+            setColor('green')
+            setTimeout(() => {
+              setText(null)
+            }, 5000)
           })
           .catch(error => {
             alert(
@@ -57,10 +65,18 @@ const App = () => {
         setPersons(persons.concat(createdPerson))
         setNewName('')
         setNewNumber('')
+        setText(`Successfully added ${createdPerson.name}`)
+        setColor('green')
+        setTimeout(() => {
+          setText(null)
+        }, 5000)
       })
-      .catch(error => {
-        alert(
-          `The person cannot be added to the phonebook`)
+      .catch(error => { 
+        setText(`Adding cannot be added to the phonebook.`)
+        setColor('red')
+        setTimeout(() => {
+          setText(null)
+        }, 5000)
         setPersons(persons.filter(person => person.name !== newPerson.name))
         setNewName('')
         setNewNumber('')
@@ -82,10 +98,18 @@ const App = () => {
       server.deletePerson(person.id)
         .then(() => {
           setPersons(persons.filter(person => person.name !== name))
+          setText(`Successfully deleted ${name}`)
+          setColor('green')
+          setTimeout(() => {
+            setText(null)
+          }, 5000)
         })
-        .catch(error => {
-          alert(
-            `The person have been deleted from the phonebook`)
+        .catch(error => { 
+          setText(`The person have been already deleted from the phonebook`)
+          setColor('red')
+          setTimeout(() => {
+            setText(null)
+          }, 5000)
           setPersons(persons.filter(person => person.name !== name))
         })
     }
@@ -102,6 +126,7 @@ const App = () => {
   return (
     <div>
       <Title title='Phonebook' />
+      <Alert text={newText} color={color} />
       <Filter inputNameValue={newFilter} inputNameChangeFunc={handleFilterChange} />
       <Title title='Add a new contact' />
       <Form submitFunc={handleAddPerson} nameValue={newName} phoneValue={newNumber} inputChangeFunc={handleSetPerson} inputPhoneFunc={handleNumberChange} buttonDesc='add' />
