@@ -1,9 +1,11 @@
 const express = require('express')
+const morgan = require("morgan")
+const cors = require('cors')
 const app = express()
 const PORT = 3001
 
 
-const persons = [
+let persons = [
     {
         "id": 1,
         "name": "Arto Hellas",
@@ -26,16 +28,23 @@ const persons = [
     }
 ]
 
-const generateId = () => {
-    const maxId = persons.length > 0
-        ? Math.max(...persons.map(n => n.id))
-        : 0
-    return maxId + 1
-}
-
 const getIdRandom = () => Math.floor(Math.random() * 1000000) 
 
 app.use(express.json());
+app.use(cors());
+
+app.use(
+    morgan(function (tokens, req, res) {
+        return [
+            tokens.method(req, res),
+            tokens.url(req, res),
+            tokens.status(req, res),
+            tokens.res(req, res, 'content-length'), '-',
+            tokens['response-time'](req, res), 'ms',
+            tokens.method(req) === "POST" ? JSON.stringify(req.body) : ""
+        ].join(' ')
+    })
+)
 
 //GET
 
@@ -87,9 +96,7 @@ app.post('/api/persons', (request, response) => {
     }
 
     const person = {...body, id: getIdRandom()}
-
     persons = persons.concat(person)
-
     response.json(person)
 })
 
@@ -101,5 +108,13 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
+
+
+const unknownMethod = (request, response) => {
+    response.status(404).send({ error: 'Method Not Available' })
+  }
+  
+  app.use(unknownMethod)
