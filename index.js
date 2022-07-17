@@ -90,3 +90,13 @@ const unknownMethod = (request, response) => {
 }
 
 app.use(unknownMethod)
+
+const errorHandler = (error, request, response, next) => {
+    switch(error.name){
+        case "CastError": return res.status(400).send({error: "unknown id"})
+        case "ValidationError": return res.status(400).json({error: error.message})
+    }
+
+}
+
+app.use(errorHandler)
