@@ -2,31 +2,9 @@ const express = require('express')
 const morgan = require("morgan")
 const cors = require('cors')
 const app = express()
+const Person = require("./models/person")
+require('dotenv').config()
 const PORT = process.env.PORT || 3001
-
-
-let persons = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-]
 
 const getIdRandom = () => Math.floor(Math.random() * 1000000)
 
@@ -54,7 +32,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(p => {
+        console.log(p)
+        res.json(p)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -73,40 +54,30 @@ app.get('/api/persons/:id', (request, response) => {
 
 //POST
 
+app.post('/api/persons', (request, response, next) => {
+    const content = request.body
 
-app.post('/api/persons', (request, response) => {
-    const body = request.body
 
-    console.log(body)
-    if (!body) {
-        return response.status(400).json({
-            error: `Person's info missing`
-        })
-    }
+    const newPerson = new Person({
+        name: content.name,
+        number: content.number,
+        id: getIdRandom()
+    })
 
-    if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: `Name or number missing`
-        })
-    }
+    newPerson.save().then(person => {
+        response.json(person)
+    })
+    .catch(error => next(error))
 
-    if (persons.find(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: `Name already exists`
-        })
-    }
-
-    const person = { ...body, id: getIdRandom() }
-    persons = persons.concat(person)
-    response.json(person)
 })
 
 //DELETE
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
+    Person.findByIdAndRemove(req.params.id).then(p => {
+        res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.listen(PORT, () => {
