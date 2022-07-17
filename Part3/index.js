@@ -1,5 +1,7 @@
-const http = require('http')
 const express = require('express')
+const app = express()
+const PORT = 3001
+
 
 const persons = [
     {
@@ -31,7 +33,11 @@ const generateId = () => {
     return maxId + 1
 }
 
-const app = express()
+const getIdRandom = () => Math.floor(Math.random() * 1000000) 
+
+app.use(express.json());
+
+//GET
 
 app.get('/', (request, response) => {
     response.end(JSON.stringify(persons))
@@ -39,26 +45,6 @@ app.get('/', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
-})
-
-app.post('/api/persons', (request, response) => {
-    const body = request.body
-
-    if (!body.name) {
-        return response.status(400).json({
-            error: `Person's name missing`
-        })
-    }
-
-    const person = {
-        name: body.name,
-        number: body.number,
-        id: generateId(),
-    }
-
-    persons = persons.concat(person)
-
-    response.json(person)
 })
 
 app.get('/info', (request, response) => {
@@ -75,12 +61,45 @@ app.get('/api/persons/:id', (request, response) => {
     response.status(404).end()
 })
 
+//POST
+
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    console.log(body)
+    if (!body) {
+        return response.status(400).json({
+            error: `Person's info missing`
+        })
+    }
+
+    if(!body.name || !body.number) {
+        return response.status(400).json({
+            error: `Name or number missing`
+        })
+    }
+
+    if(persons.find(person => person.name === body.name)) {
+        return response.status(400).json({
+            error: `Name already exists`
+        })
+    }
+
+    const person = {...body, id: getIdRandom()}
+
+    persons = persons.concat(person)
+
+    response.json(person)
+})
+
+//DELETE
+
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 })
 
-const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
