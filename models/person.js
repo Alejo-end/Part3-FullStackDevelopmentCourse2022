@@ -1,15 +1,15 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 require('dotenv').config()
 
 const url = process.env.MONGODB_URI
 
-console.log("connecting", url)
+console.log('connecting', url)
 mongoose.connect(url)
     .then(res => {
-        console.log("connected succesfully")
+        console.log('connected succesfully')
     })
     .catch((err) => {
-        console.log("error:", err.message)
+        console.log('error:', err.message)
     })
 
 const personSchema = new mongoose.Schema({
@@ -20,7 +20,13 @@ const personSchema = new mongoose.Schema({
     },
     number: {
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: function (v) {
+                return /^\d{2,3}-\d{5,}/.test(v)
+            },
+            message: props => `${props.value} is not a valid number`
+        },
     },
     id: Number,
 })
@@ -34,4 +40,4 @@ personSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model("Person", personSchema)
+module.exports = mongoose.model('Person', personSchema)
