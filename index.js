@@ -13,14 +13,14 @@ app.use(cors());
 app.use(express.static("build"))
 
 app.use(
-    morgan(function (tokens, req, res) {
+    morgan(function (tokens, request, response) {
         return [
-            tokens.method(req, res),
-            tokens.url(req, res),
-            tokens.status(req, res),
-            tokens.res(req, res, 'content-length'), '-',
-            tokens['response-time'](req, res), 'ms',
-            tokens.method(req) === "POST" ? JSON.stringify(req.body) : ""
+            tokens.method(request, response),
+            tokens.url(request, response),
+            tokens.status(request, response),
+            tokens.res(request, response, 'content-length'), '-',
+            tokens['response-time'](request, response), 'ms',
+            tokens.method(request) === "POST" ? JSON.stringify(request.body) : ""
         ].join(' ')
     })
 )
@@ -34,7 +34,7 @@ app.get('/', (request, response) => {
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(p => {
         console.log(p)
-        res.json(p)
+        response.json(p)
     })
 })
 
@@ -74,8 +74,8 @@ app.post('/api/persons', (request, response, next) => {
 //DELETE
 
 app.delete('/api/persons/:id', (request, response) => {
-    Person.findByIdAndRemove(req.params.id).then(p => {
-        res.status(204).end()
+    Person.findByIdAndRemove(request.params.id).then(p => {
+        response.status(204).end()
     })
     .catch(error => next(error))
 })
@@ -93,10 +93,10 @@ app.use(unknownMethod)
 
 const errorHandler = (error, request, response, next) => {
     switch(error.name){
-        case "CastError": return res.status(400).send({error: "unknown id"})
-        case "ValidationError": return res.status(400).json({error: error.message})
+        case "CastError": return response.status(400).send({error: "unknown id"})
+        case "ValidationError": return response.status(400).json({error: error.message})
     }
-
+    next(error)
 }
 
 app.use(errorHandler)

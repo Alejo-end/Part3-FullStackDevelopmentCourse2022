@@ -7,7 +7,7 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url = process.env.MONGODB_URI
+const url = `mongodb+srv://alejandro:${password}@cluster0.psyo9.mongodb.net/?retryWrites=true&w=majority`
 
 const getIdRandom = () => Math.floor(Math.random() * 1000000)
 
